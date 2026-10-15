@@ -1,0 +1,23 @@
+workflows:
+  android-workflow:
+    name: Arab Star Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up Flutter project
+        script: |
+          flutter create . --platforms=android --project-name arab_star --org com.arabstar --no-pub -a java -i swift
+          flutter pub get
+      - name: Build APK
+        script: |
+          flutter build apk --release
+    artifacts:
+      - build/**/outputs/**/*.apk
+    publishing:
+      email:
+        recipients:
+          - mhmdbsamaljhyfy25@gmail.com
