@@ -1,23 +1,20 @@
 workflows:
   android-workflow:
-    name: Arab Star Build
-    max_build_duration: 60
+    name: Android Workflow
+    max_build_duration: 20
     instance_type: mac_mini_m2
     environment:
       flutter: stable
-      xcode: latest
-      cocoapods: default
+      java: 17
     scripts:
-      - name: Set up Flutter project
+      - name: Fix Android SDK
         script: |
-          flutter create . --platforms=android --project-name arab_star --org com.arabstar --no-pub -a java -i swift
-          flutter pub get
+          sed -i '' 's/compileSdk.*/compileSdk 36/' android/app/build.gradle || true
+          sed -i '' 's/compileSdkVersion.*/compileSdkVersion 36/' android/app/build.gradle || true
       - name: Build APK
         script: |
+          flutter clean
+          flutter pub get
           flutter build apk --release
     artifacts:
       - build/**/outputs/**/*.apk
-    publishing:
-      email:
-        recipients:
-          - mhmdbsamaljhyfy25@gmail.com
